@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' width="400px" height="800px" (mousedown)="dragStart()" (mouseup)="dragStop()" (mousemove)="drag($event)">
+    <g id="draggable-map" [attr.transform]="translate()">
+        <g class="scale-group"  [attr.transform]="scale()">
+            @if(privateData){
+            @switch (privateData.type) {
+
+            @case ('rect') {
+            <rect x="0" y="0" width="100" height="60" fill="red" />
+            }
+            }
+            }
+        </g>
+    </g>
+</svg>
+<button (click)="getSVGGroup(privateData)">change</button>
