@@ -51,7 +51,7 @@ const room: Container = {
       children: [],
     },
     {
-      id: '4',
+      id: '9',
       name: 'table',
       drawType: 'lShape',
       view: {

@@ -46,7 +46,7 @@ export class SvgService {
     cHeight: number
   ): number {
     let scale = Math.min(pWidth / cWidth, pHeight / cHeight);
-    return scale * 0.9;
+    return Math.min(scale * 0.9, 5);
   }
 
   transformCenter(
@@ -103,6 +103,7 @@ export class SvgService {
     d += 'z';
     path.setAttribute('d', d);
     path = this.setCommonAttributes(container, path, id) as SVGPathElement;
+    path.setAttribute('fill', 'red');
     return path;
   }
 

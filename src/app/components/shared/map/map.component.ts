@@ -84,7 +84,10 @@ export class MapComponent implements AfterViewInit{
     console.log(e.target);
     if((e.target as HTMLElement).hasAttribute('group_item_id')){
       let id = (e.target as HTMLElement).getAttribute('group_item_id');
-      console.log(this.dataService.flatDataNodes(this.privateData).find(el => el.id == id));
+      let el = this.dataService.flatDataNodes(this.privateData).find(el => el.id == id);
+      console.log(el);
+      this.scaleValue.set(this.svgService.scaleForSize(400, 800, el?.view.width ?? 0, el?.view.height ?? 0));
+      this.translateValues.set(this.svgService.transformCenter(400,800,el?.view.x ?? 0, el?.view.y??0,el?.view.width ?? 0,el?.view.height ?? 0,this.scaleValue()));
     }
   }
 }
