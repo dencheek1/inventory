@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   ElementRef,
@@ -18,7 +19,7 @@ import { DataService } from '../../../core/data/data.service';
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
-export class MapComponent {
+export class MapComponent implements AfterViewInit{
   private svgService = inject(SvgService);
   private dataService = inject(DataService);
 
@@ -53,12 +54,7 @@ export class MapComponent {
     this.mapDragged = true;
     console.log(this.mapView);
     // let rect = document.createElement('rect');
-    let group = this.svgService.createSVGGroup(this.dataService.flatDataNodes(this.privateData));
     // let element = new SVGAElement();
-    this.mapView.nativeElement.appendChild(group);
-    console.log(this.dataService.flatDataNodes(this.privateData));
-    this.scaleValue.set(this.svgService.scaleForSize(400, 800, 100, 60));
-    console.log(this.scaleValue());
   }
 
   drag(e: MouseEvent) {
@@ -73,5 +69,22 @@ export class MapComponent {
 
   dragStop() {
     this.mapDragged = false;
+  }
+
+  ngAfterViewInit(): void {
+    let group = this.svgService.createSVGGroup(this.dataService.flatDataNodes(this.privateData));
+    this.mapView.nativeElement.appendChild(group);
+    console.log(this.dataService.flatDataNodes(this.privateData));
+    this.scaleValue.set(this.svgService.scaleForSize(400, 800, this.privateData.view.width , this.privateData.view.height));
+    this.translateValues.set(this.svgService.transformCenter(400,800,0,0,this.privateData.view.width,this.privateData.view.height,this.scaleValue()));
+    console.log(this.scaleValue());
+  }
+
+  logData(e: Event){
+    console.log(e.target);
+    if((e.target as HTMLElement).hasAttribute('group_item_id')){
+      let id = (e.target as HTMLElement).getAttribute('group_item_id');
+      console.log(this.dataService.flatDataNodes(this.privateData).find(el => el.id == id));
+    }
   }
 }
