@@ -73,6 +73,7 @@ export class SvgService {
     rect.setAttribute('width', '' + container.width);
     rect.setAttribute('height', '' + container.height);
     rect = this.setCommonAttributes(container, rect, id) as SVGRectElement;
+    ((container.rotation == undefined) || (container.rotation  % 90) == 0) && rect.setAttribute('shape-rendering', 'crispEdges');
     return rect;
   }
 
@@ -89,21 +90,34 @@ export class SvgService {
   lShape(container: LShape, id: string): Element {
     let path = document.createElementNS(this.SVG_NS, 'path');
     let d = '';
+    // d +=
+    //   'M ' +
+    //   (container.cx + container.x) +
+    //   ',' +
+    //   (container.cy + container.y) +
+    //   ' ';
+    // d += 'h ' + (container.width - container.cx) + ' ';
+    // d += 'v ' + container.height + ' ';
+    // d += 'h ' + -container.width + ' ';
+    // d += 'v ' + (-container.height + container.cy) + ' ';
+    // d += 'h ' + container.cx + ' ';
+  // * result in origin in left top corner
     d +=
       'M ' +
-      (container.cx + container.x) +
+      (container.x) +
       ',' +
-      (container.cy + container.y) +
+      (container.y) +
       ' ';
-    d += 'h ' + (container.width - container.cx) + ' ';
+    d += 'h ' + (container.width) + ' ';
     d += 'v ' + container.height + ' ';
-    d += 'h ' + -container.width + ' ';
+    d += 'h ' + (-container.width + container.cx) + ' ';
     d += 'v ' + (-container.height + container.cy) + ' ';
-    d += 'h ' + container.cx + ' ';
+    d += 'h ' + (-container.cx) + ' ';
     d += 'z';
     path.setAttribute('d', d);
     path = this.setCommonAttributes(container, path, id) as SVGPathElement;
     path.setAttribute('fill', 'red');
+    (container.rotation == undefined || (container.rotation  % 90) == 0) && path.setAttribute('shape-rendering', 'crispEdges');
     return path;
   }
 
@@ -112,7 +126,7 @@ export class SvgService {
     el.setAttribute('stroke', shape.stroke ?? '#333');
     el.setAttribute('stroke-width', '1');
     el.setAttribute('group_item_id', id);
-    el.setAttribute('transform', `rotate(0 0 ${ shape.rotation ?? 0})`)
+    el.setAttribute('transform', `rotate(${ shape.rotation ?? 0}, ${shape.x + (shape.width/2)}, ${shape.y + (shape.height/2)})`)
     return el;
   }
 }

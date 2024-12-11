@@ -18,4 +18,9 @@ export class DataService {
     }
     return nodes;
   }
+
+  findWithId(data: Container, id:string){
+    let arr = this.flatDataNodes(data);
+    return arr.find( el => el.id == id);
+  }
 }
