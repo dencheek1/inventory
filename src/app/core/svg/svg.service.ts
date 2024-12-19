@@ -90,17 +90,6 @@ export class SvgService {
   lShape(container: LShape, id: string): Element {
     let path = document.createElementNS(this.SVG_NS, 'path');
     let d = '';
-    // d +=
-    //   'M ' +
-    //   (container.cx + container.x) +
-    //   ',' +
-    //   (container.cy + container.y) +
-    //   ' ';
-    // d += 'h ' + (container.width - container.cx) + ' ';
-    // d += 'v ' + container.height + ' ';
-    // d += 'h ' + -container.width + ' ';
-    // d += 'v ' + (-container.height + container.cy) + ' ';
-    // d += 'h ' + container.cx + ' ';
   // * result in origin in left top corner
     d +=
       'M ' +
@@ -116,7 +105,7 @@ export class SvgService {
     d += 'z';
     path.setAttribute('d', d);
     path = this.setCommonAttributes(container, path, id) as SVGPathElement;
-    path.setAttribute('fill', 'red');
+    path.setAttribute('fill', '#0000');
     (container.rotation == undefined || (container.rotation  % 90) == 0) && path.setAttribute('shape-rendering', 'crispEdges');
     return path;
   }

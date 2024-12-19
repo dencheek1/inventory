@@ -4,7 +4,7 @@ export interface ViewShape {
     width:number;
     height:number;
     stroke?: string;
-    strokeWidth:number;
+    strokeWidth?:number;
     fill?:string;
     rotation?:number;
 }

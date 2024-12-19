@@ -8,4 +8,11 @@ export const routes: Routes = [
         (x) => x.MainComponent
       ),
   },
+  {
+    path: 'edit',
+    loadComponent: () =>
+      import('./components/pages/edit/edit.component').then(
+        (x) => x.EditComponent
+      ),
+  },
 ];

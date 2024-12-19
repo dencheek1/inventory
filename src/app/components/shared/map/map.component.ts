@@ -4,13 +4,14 @@ import {
   computed,
   ElementRef,
   inject,
+  input,
   OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
-import { room } from '../../../../assets/test-data';
 import { SvgService } from '../../../core/svg/svg.service';
 import { DataService } from '../../../core/data/data.service';
+import { Container } from '../../../core/interface/container/container';
 
 @Component({
   selector: 'app-map',
@@ -28,7 +29,7 @@ export class MapComponent implements AfterViewInit{
     () => `translate(${this.translateValues()[0]} ${this.translateValues()[1]})`
   );
   translateValues = signal<Array<number>>([0, 0]);
-  privateData = room;
+  public container = input.required<Container>();
   scaleValue = signal<number>(1);
   scale = computed(() => `scale(${this.scaleValue()})`)
 
@@ -38,23 +39,11 @@ export class MapComponent implements AfterViewInit{
   //TODO add proper interface for the data structure
   getSVGGroup(room: any): Element{
     let rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-    rect.setAttribute('x','0');
-    rect.setAttribute('y','90');
-    rect.setAttribute('width','50');
-    rect.setAttribute('height','50');
-    rect.setAttribute('fill','green');
     // this.mapView.nativeElement.appendChild(rect);
     return rect;
   }
-  // scale() {
-  //   return `scale(${this.scaleValue})`;
-  // }
-
   dragStart() {
     this.mapDragged = true;
-    console.log(this.mapView);
-    // let rect = document.createElement('rect');
-    // let element = new SVGAElement();
   }
 
   drag(e: MouseEvent) {
@@ -72,11 +61,11 @@ export class MapComponent implements AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    let group = this.svgService.createSVGGroup(this.dataService.flatDataNodes(this.privateData));
+    let group = this.svgService.createSVGGroup(this.dataService.flatDataNodes(this.container()));
     this.mapView.nativeElement.appendChild(group);
-    console.log(this.dataService.flatDataNodes(this.privateData));
-    this.scaleValue.set(this.svgService.scaleForSize(400, 800, this.privateData.view.width , this.privateData.view.height));
-    this.translateValues.set(this.svgService.transformCenter(400,800,0,0,this.privateData.view.width,this.privateData.view.height,this.scaleValue()));
+    console.log(this.dataService.flatDataNodes(this.container()));
+    this.scaleValue.set(this.svgService.scaleForSize(400, 800, this.container().view.width , this.container().view.height));
+    this.translateValues.set(this.svgService.transformCenter(400,800,0,0,this.container().view.width,this.container().view.height,this.scaleValue()));
     console.log(this.scaleValue());
   }
 
@@ -84,10 +73,19 @@ export class MapComponent implements AfterViewInit{
     console.log(e.target);
     if((e.target as HTMLElement).hasAttribute('group_item_id')){
       let id = (e.target as HTMLElement).getAttribute('group_item_id');
-      let el = this.dataService.flatDataNodes(this.privateData).find(el => el.id == id);
+      let el = this.dataService.flatDataNodes(this.container()).find(el => el.id == id);
       console.log(el);
       this.scaleValue.set(this.svgService.scaleForSize(400, 800, el?.view.width ?? 0, el?.view.height ?? 0));
       this.translateValues.set(this.svgService.transformCenter(400,800,el?.view.x ?? 0, el?.view.y??0,el?.view.width ?? 0,el?.view.height ?? 0,this.scaleValue()));
     }
+  }
+
+  // TODO scale relative to the cursor position
+  scroll(e: WheelEvent){
+    let val = this.scaleValue();
+    val += e.deltaY * -0.01;
+    val = Math.min(6,Math.max(1, val));
+    this.scaleValue.set(val);
+    console.log(e);
   }
 }

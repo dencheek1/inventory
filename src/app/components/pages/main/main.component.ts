@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MapComponent } from "../../shared/map/map.component";
+import { room } from '../../../../assets/test-data';
 
 @Component({
   selector: 'app-main',
@@ -9,5 +10,5 @@ import { MapComponent } from "../../shared/map/map.component";
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
-
+  container = room;
 }

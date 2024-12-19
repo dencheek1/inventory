@@ -1,8 +1,8 @@
 <svg (dblclick)="logData($event)" xmlns='http://www.w3.org/2000/svg' width="400px" height="800px" (mousedown)="dragStart()" (mouseup)="dragStop()"
-    (mousemove)="drag($event)">
+    (mousemove)="drag($event)" (wheel)="scroll($event)">
     <g id="draggable-map" [attr.transform]="translate()">
         <g #data class="scale-group" [attr.transform]="scale()">
         </g>
     </g>
 </svg>
-<button (click)="getSVGGroup(privateData)">change</button>
+<button (click)="getSVGGroup(container)">change</button>
