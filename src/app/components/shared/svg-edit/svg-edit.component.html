@@ -1,11 +1,12 @@
 <div class="edit">
 <div class="shapes">
-    <div class="rect">rect</div>
-    <div class="elipse">elipse</div>
-    <div class="l-shape">l-shape</div>
+    <div class="rect" (mouseup)="selectMode('rect')">rect</div>
+    <div class="elipse"(mouseup)="selectMode('ellipse')">elipse</div>
+    <div class="l-shape"(mouseup)="selectMode('l-shape')">l-shape</div>
+    <div class="l-shape"(mouseup)="selectMode('path')">path</div>
     
 </div>
-<svg  xmlns='http://www.w3.org/2000/svg' width="400px" height="800px" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseup)="mouseUp($event)">
+<svg  xmlns='http://www.w3.org/2000/svg' width="400px" height="800px" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseup)="mouseUp($event)" (mouseleave)="mouseUp($event)">
     <g id="draggable-map" [attr.transform]="translate()">
         <g #data class="scale-group" [attr.transform]="scale()">
         </g>
