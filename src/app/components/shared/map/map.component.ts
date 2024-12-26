@@ -12,17 +12,19 @@ import {
 import { SvgService } from '../../../core/svg/svg.service';
 import { DataService } from '../../../core/data/data.service';
 import { Container } from '../../../core/interface/container/container';
+import { ItemInfoComponent } from "../item-info/item-info.component";
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [ItemInfoComponent],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
 export class MapComponent implements AfterViewInit{
   private svgService = inject(SvgService);
   private dataService = inject(DataService);
+  public selectedItem = signal<Container>({} as Container);
 
   mapDragged = false;
   translate = computed(
@@ -60,6 +62,7 @@ export class MapComponent implements AfterViewInit{
     this.mapDragged = false;
   }
 
+  //TODO get viewport width and height from view and use as parameter for methods
   ngAfterViewInit(): void {
     let group = this.svgService.createSVGGroup(this.dataService.flatDataNodes(this.container()));
     this.mapView.nativeElement.appendChild(group);
@@ -77,6 +80,7 @@ export class MapComponent implements AfterViewInit{
       console.log(el);
       this.scaleValue.set(this.svgService.scaleForSize(400, 800, el?.view.width ?? 0, el?.view.height ?? 0));
       this.translateValues.set(this.svgService.transformCenter(400,800,el?.view.x ?? 0, el?.view.y??0,el?.view.width ?? 0,el?.view.height ?? 0,this.scaleValue()));
+      if(el)this.selectedItem.set(el);
     }
   }
 

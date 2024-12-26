@@ -1,8 +1,11 @@
-<svg (dblclick)="logData($event)" xmlns='http://www.w3.org/2000/svg' width="400px" height="800px" (mousedown)="dragStart()" (mouseup)="dragStop()"
-    (mousemove)="drag($event)" (wheel)="scroll($event)">
-    <g id="draggable-map" [attr.transform]="translate()">
-        <g #data class="scale-group" [attr.transform]="scale()">
+<div class="wrapper">
+    <svg (dblclick)="logData($event)" xmlns='http://www.w3.org/2000/svg' width="400px" height="800px"
+        (mousedown)="dragStart()" (mouseup)="dragStop()" (mousemove)="drag($event)" (wheel)="scroll($event)">
+        <g id="draggable-map" [attr.transform]="translate()">
+            <g #data class="scale-group" [attr.transform]="scale()">
+            </g>
         </g>
-    </g>
-</svg>
+    </svg>
+    <app-item-info [item]="selectedItem()"/>
+</div>
 <button (click)="getSVGGroup(container)">change</button>
