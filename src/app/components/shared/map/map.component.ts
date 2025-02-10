@@ -88,6 +88,7 @@ export class MapComponent implements AfterViewInit{
 
   // TODO scale relative to the cursor position
   scroll(e: WheelEvent){
+    e.preventDefault();
     console.log(e.target)
     let val = this.scaleValue();
     let translate = [...this.translateValues()];
