@@ -53,6 +53,7 @@ export class MapComponent implements AfterViewInit{
     if (this.mapDragged && e.buttons & 1) {
       let tv = this.translateValues();
       this.translateValues.set([tv[0] + e.movementX, tv[1] + e.movementY]);
+      console.log(this.translateValues());
     } else {
       this.mapDragged = false;
     }
@@ -80,16 +81,28 @@ export class MapComponent implements AfterViewInit{
       console.log(el);
       this.scaleValue.set(this.svgService.scaleForSize(400, 800, el?.view.width ?? 0, el?.view.height ?? 0));
       this.translateValues.set(this.svgService.transformCenter(400,800,el?.view.x ?? 0, el?.view.y??0,el?.view.width ?? 0,el?.view.height ?? 0,this.scaleValue()));
+      console.log(this.translate());
       if(el)this.selectedItem.set(el);
     }
   }
 
   // TODO scale relative to the cursor position
   scroll(e: WheelEvent){
+    console.log(e.target)
     let val = this.scaleValue();
-    val += e.deltaY * -0.01;
-    val = Math.min(6,Math.max(1, val));
-    this.scaleValue.set(val);
-    console.log(e);
+    let translate = [...this.translateValues()];
+
+    let newVal = val + e.deltaY * -0.01;
+    newVal = Math.min(6,Math.max(1, newVal));
+    let rel = newVal/val;
+    //width 400 height 800
+    translate[0] = (translate[0]) * rel - (rel-1)*200;
+    translate[1] = (translate[1]) * rel - (rel-1)*400;
+    // translate[0] = center[0] - 200/newVal;
+    console.log(translate[0] + 200*newVal);
+    console.log(translate);
+    let centerCorrection = 0;
+    this.translateValues.set([...translate]);
+    this.scaleValue.set(newVal);
   }
 }

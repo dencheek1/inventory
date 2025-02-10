@@ -113,9 +113,10 @@ export class SvgService {
   setCommonAttributes(shape : ViewShape, el: Element, id:string): Element{
     el.setAttribute('fill', shape.fill ?? '#0000');
     el.setAttribute('stroke', shape.stroke ?? '#333');
-    el.setAttribute('stroke-width', '1');
+    el.setAttribute('stroke-width', '2');
     el.setAttribute('group_item_id', id);
     el.setAttribute('transform', `rotate(${ shape.rotation ?? 0}, ${shape.x + (shape.width/2)}, ${shape.y + (shape.height/2)})`)
+    el.setAttribute('vector-effect', 'non-scaling-stroke');
     return el;
   }
 }
